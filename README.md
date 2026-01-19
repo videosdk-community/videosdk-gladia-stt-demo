@@ -1,4 +1,4 @@
-# VideoSDK + Gladia STT Demo
+# VideoSDK x Gladia STT Demo
 
 This example demonstrates how to build a voice assistant using **VideoSDK**'s `CascadingPipeline` with **Gladia**.
 
