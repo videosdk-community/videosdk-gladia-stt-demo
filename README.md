@@ -73,8 +73,6 @@ Run the agent:
 python main.py
 ```
 
-The agent will join the room (as configured in `main.py`) and wait for you to speak.
-
 ## Documentation
 
 - [Gladia STT Plugin Documentation](https://docs.videosdk.live/ai_agents/plugins/stt/gladia)
