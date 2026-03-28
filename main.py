@@ -1,11 +1,13 @@
-import asyncio, os
-from videosdk.agents import Agent, AgentSession, CascadingPipeline, JobContext, RoomOptions, WorkerJob,ConversationFlow
+import os
+from videosdk.agents import Agent, AgentSession, Pipeline, JobContext, RoomOptions, WorkerJob
 from videosdk.plugins.silero import SileroVAD
 from videosdk.plugins.turn_detector import TurnDetector, pre_download_model
 from videosdk.plugins.gladia import GladiaSTT
 from videosdk.plugins.google import GoogleLLM
 from videosdk.plugins.deepgram import DeepgramTTS
-from typing import AsyncIterator
+
+import logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", handlers=[logging.StreamHandler()])
 
 # Pre-downloading the Turn Detector model
 pre_download_model()
@@ -18,12 +20,11 @@ class MyVoiceAgent(Agent):
 
 async def start_session(context: JobContext):
     
-    # Create agent and conversation flow
+    # Create agent and pipeline
     agent = MyVoiceAgent()
-    conversation_flow = ConversationFlow(agent)
 
     # Create pipeline
-    pipeline = CascadingPipeline(
+    pipeline = Pipeline(
         stt=GladiaSTT(
                 languages=["en"],
                 code_switching=True,
@@ -41,23 +42,14 @@ async def start_session(context: JobContext):
 
     session = AgentSession(
         agent=agent,
-        pipeline=pipeline,
-        conversation_flow=conversation_flow
+        pipeline=pipeline
     )
 
-    try:
-        await context.connect()
-        await session.start()
-        # Keep the session running until manually terminated
-        await asyncio.Event().wait()
-    finally:
-        # Clean up resources when done
-        await session.close()
-        await context.shutdown()
+    await session.start(wait_for_participant=True, run_until_shutdown=True)
 
 def make_context() -> JobContext:
     room_options = RoomOptions(
-     #  room_id="YOUR_MEETING_ID",  # Set to join a pre-created room; omit to auto-create
+     #  room_id="<room_id>",  # Set to join a pre-created room; omit to auto-create
         name="VideoSDK Cascaded Agent",
         playground=True
     )
