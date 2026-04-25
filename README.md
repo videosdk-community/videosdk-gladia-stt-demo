@@ -51,7 +51,8 @@ This example demonstrates how to build a voice assistant using **VideoSDK**'s `P
     ```env
     DEEPGRAM_API_KEY="your_deepgram_api_key"
     GOOGLE_API_KEY="your_google_api_key"
-    VIDEOSDK_AUTH_TOKEN="your_videosdk_auth_token"
+    VIDEOSDK_API_KEY="your_videosdk_api_key"
+    VIDEOSDK_SECRET_KEY="your_videosdk_secret_key"
     GLADIA_API_KEY="your_gladia_api_key"
     ```
 
